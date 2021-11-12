@@ -2,7 +2,7 @@ from aws_cdk import aws_codepipeline as codepipeline
 from aws_cdk import aws_codepipeline_actions as actions
 from aws_cdk import core, pipelines
 
-from .service_stage import ServiceStage
+from stacks.service_stage import ServiceStage
 
 
 class PipelineStack(core.Stack):
