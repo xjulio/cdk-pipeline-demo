@@ -6,7 +6,7 @@ from aws_cdk import pipelines
 
 class PipelineStack(core.Stack):
     def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
-        super.__init__(scope, id, kwargs)
+        super().__init__(scope, id, **kwargs)
 
         #
         source_artifact = codepipeline.Artifact()
@@ -21,6 +21,13 @@ class PipelineStack(core.Stack):
                 output=source_artifact,
                 trigger=actions.GitHubTrigger.POLL,
                 owner="xjulio",
-                repo=""
+                repo="cdk-pipeline-demo.git",
+                oauth_token=core.SecretValue.ssm_secure("/token/github/xjulio", "1")
+            ),
+            synth_action=pipelines.SimpleSynthAction(
+                source_artifact=source_artifact,
+                cloud_assembly_artifact=cloud_assembly_artifact,
+                install_command="npm install -g aws-cdk && pip install -r requirements.txt",
+                synth_command="cdk synth"
             )
         )

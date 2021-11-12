@@ -10,6 +10,7 @@ from aws_cdk import core as cdk
 from aws_cdk import core
 
 from stacks.lambda_stack import LambdaStack
+from stacks.pipeline_stack import PipelineStack
 
 
 app = core.App()
@@ -32,4 +33,8 @@ app = core.App()
 # For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html
 
 LambdaStack(app, "LambdaStack")
+PipelineStack(app, 'PipelineStack', env={
+    'account': '220544310453',
+    'region': 'us-east-1'
+})
 app.synth()
