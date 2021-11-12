@@ -21,7 +21,7 @@ class PipelineStack(core.Stack):
                 output=source_artifact,
                 trigger=actions.GitHubTrigger.POLL,
                 owner="xjulio",
-                repo="cdk-pipeline-demo.git",
+                repo="cdk-pipeline-demo",
                 branch="main",
                 oauth_token=core.SecretValue.secrets_manager("tokens/github/xjulio")
             ),
