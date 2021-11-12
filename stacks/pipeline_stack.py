@@ -1,7 +1,8 @@
-from aws_cdk import core
 from aws_cdk import aws_codepipeline as codepipeline
 from aws_cdk import aws_codepipeline_actions as actions
-from aws_cdk import pipelines
+from aws_cdk import core, pipelines
+
+from .service_stage import ServiceStage
 
 
 class PipelineStack(core.Stack):
@@ -32,3 +33,8 @@ class PipelineStack(core.Stack):
                 synth_command="cdk synth"
             )
         )
+
+        pipeline.add_application_stage(ServiceStage(self, 'Pre-prod', env={
+            'account': '220544310453',
+            'region': 'us-east-1'
+        }))

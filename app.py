@@ -1,7 +1,4 @@
 #!/usr/bin/env python3
-import os
-
-from aws_cdk import core as cdk
 
 # For consistency with TypeScript code, `cdk` is the preferred import name for
 # the CDK's core module.  The following line also imports it as `core` for use
@@ -9,9 +6,7 @@ from aws_cdk import core as cdk
 # being updated to use `cdk`.  You may delete this import if you don't need it.
 from aws_cdk import core
 
-from stacks.lambda_stack import LambdaStack
 from stacks.pipeline_stack import PipelineStack
-
 
 app = core.App()
 # If you don't specify 'env', this stack will be environment-agnostic.
@@ -32,7 +27,6 @@ app = core.App()
 
 # For more information, see https://docs.aws.amazon.com/cdk/latest/guide/environments.html
 
-LambdaStack(app, "LambdaStack")
 PipelineStack(app, 'PipelineStack', env={
     'account': '220544310453',
     'region': 'us-east-1'
