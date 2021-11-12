@@ -12,7 +12,7 @@ class PipelineStack(core.Stack):
         source_artifact = codepipeline.Artifact()
         cloud_assembly_artifact = codepipeline.Artifact()
 
-        pipelines.CdkPipeline(
+        pipeline = pipelines.CdkPipeline(
             self, 'Pipeline',
             pipeline_name="InfraPipeline",
             cloud_assembly_artifact=cloud_assembly_artifact,
