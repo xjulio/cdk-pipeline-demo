@@ -9,6 +9,17 @@ class PipelineStack(core.Stack):
     def __init__(self, scope: core.Construct, id: str, **kwargs) -> None:
         super().__init__(scope, id, **kwargs)
 
+        # accounts
+        pre_prod_app = ServiceStage(self, 'Pre-prod', env={
+            'account': '220544310453',
+            'region': 'us-east-1'
+        })
+
+        prod_app = ServiceStage(self, 'Prod', env={
+            'account': '219322593235',
+            'region': 'eu-west-1'
+        })
+
         #
         source_artifact = codepipeline.Artifact()
         cloud_assembly_artifact = codepipeline.Artifact()
@@ -30,19 +41,24 @@ class PipelineStack(core.Stack):
                 source_artifact=source_artifact,
                 cloud_assembly_artifact=cloud_assembly_artifact,
                 install_command="npm install -g aws-cdk && pip install -r requirements.txt",
-                build_command="pytest tests",
+                build_command="pytest tests/unit",
                 synth_command="cdk synth"
             )
         )
-
-        pre_prod_stage = pipeline.add_application_stage(ServiceStage(self, 'Pre-prod', env={
-            'account': '220544310453',
-            'region': 'us-east-1'
-        }))
+        pre_prod_stage = pipeline.add_application_stage(pre_prod_app)
+        pre_prod_stage.add_actions(pipelines.ShellScriptAction(
+            action_name="Integration",
+            run_order=pre_prod_stage.next_sequential_run_order(),
+            additional_artifacts=[source_artifact],
+            commands=[
+                'pip install -r requirements.txt',
+                'pytest tests/integ'
+            ],
+            use_outputs={
+                'SERVICE_URL': pipeline.stack_output(pre_prod_app.url_output)
+            }
+        ))
 
         pre_prod_stage.add_manual_approval_action(action_name="PromoteToProd")
 
-        pipeline.add_application_stage(ServiceStage(self, 'Prod', env={
-            'account': '219322593235',
-            'region': 'eu-west-1'
-        }))
+        pipeline.add_application_stage(prod_app)
