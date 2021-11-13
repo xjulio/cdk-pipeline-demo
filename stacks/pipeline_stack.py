@@ -14,7 +14,7 @@ class PipelineStack(core.Stack):
         cloud_assembly_artifact = codepipeline.Artifact()
 
         pipeline = pipelines.CdkPipeline(
-            self, 'Pipeline',
+            self, 'Pipeline', cross_account_keys=True,
             pipeline_name="InfraPipeline",
             cloud_assembly_artifact=cloud_assembly_artifact,
             source_action=actions.GitHubSourceAction(
