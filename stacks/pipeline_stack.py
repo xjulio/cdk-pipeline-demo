@@ -34,7 +34,14 @@ class PipelineStack(core.Stack):
             )
         )
 
-        pipeline.add_application_stage(ServiceStage(self, 'Pre-prod', env={
+        pre_prod_stage = pipeline.add_application_stage(ServiceStage(self, 'Pre-prod', env={
             'account': '220544310453',
             'region': 'us-east-1'
+        }))
+
+        pre_prod_stage.add_manual_approval_action(action_name="PromoteToProd")
+
+        pipeline.add_application_stage(ServiceStage(self, 'Prod', env={
+            'account': '219322593235',
+            'region': 'eu-west-1'
         }))
