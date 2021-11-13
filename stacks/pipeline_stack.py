@@ -46,6 +46,7 @@ class PipelineStack(core.Stack):
             )
         )
         pre_prod_stage = pipeline.add_application_stage(pre_prod_app)
+
         pre_prod_stage.add_actions(pipelines.ShellScriptAction(
             action_name="Integration",
             run_order=pre_prod_stage.next_sequential_run_order(),
@@ -58,7 +59,5 @@ class PipelineStack(core.Stack):
                 'SERVICE_URL': pipeline.stack_output(pre_prod_app.url_output)
             }
         ))
-
-        pre_prod_stage.add_manual_approval_action(action_name="PromoteToProd")
 
         pipeline.add_application_stage(prod_app)
