@@ -23,7 +23,3 @@ jobs:
       run: pip install -r requirements.txt
     - name: Analyze with SonarCloud
       uses: sonarsource/sonarcloud-github-action@master
-      with:
-        args: >
-          -Dsonar.organization=xjulio
-          -Dsonar.projectKey=xjulio_cdk-pipeline-demo
